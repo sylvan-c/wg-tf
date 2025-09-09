@@ -1,2 +1,3 @@
 do-wg.json
 terraform.tfvars
+.terraform*

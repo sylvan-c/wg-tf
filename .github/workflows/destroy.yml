@@ -1,37 +1,23 @@
-name: Destroy VPN
-
-on:
-  workflow_dispatch:
-    inputs:
-      region:
-        description: 'Region of the VPN droplet'
-        required: true
-        default: nyc3
-      droplet_name:
-        description: 'Name of the VPN droplet'
-        required: true
-        default: wg-vpn
-
 jobs:
   destroy:
     runs-on: ubuntu-latest
+    env:
+      DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.6.0
-
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Destroy
+      - name: Destroy active VPN droplet
         run: |
-          terraform destroy -auto-approve \
-            -var="do_token=${{ secrets.DIGITALOCEAN_TOKEN }}" \
-            -var="ssh_fingerprint=b2:5f:b6:f8:09:e2:91:fd:39:2c:9e:e2:c8:65:a6:9d" \
-            -var="region=${{ github.event.inputs.region }}" \
-            -var="droplet_name=${{ github.event.inputs.droplet_name }}" \
-            -input=false
+          DROPLET_ID=$(curl -s -X GET \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $DIGITALOCEAN_TOKEN" \
+            "https://api.digitalocean.com/v2/droplets" \
+            | jq -r '.droplets[] | select(.name==${{ github.event.inputs.droplet_name }}) | .id')
+          
+          if [ -n "$DROPLET_ID" ]; then
+            curl -s -X DELETE \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $DIGITALOCEAN_TOKEN" \
+              "https://api.digitalocean.com/v2/droplets/$DROPLET_ID"
+            echo "Droplet $DROPLET_ID destroyed."
+          else
+            echo "No droplet found to destroy."
+          fi
