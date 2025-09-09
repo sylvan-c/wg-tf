@@ -28,9 +28,10 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve \
-          -var="do_token=${{ secrets.DIGITALOCEAN_TOKEN }}" \
-          -var="ssh_fingerprint=b2:5f:b6:f8:09:e2:91:fd:39:2c:9e:e2:c8:65:a6:9d" \
-          -var="region=${{ github.event.inputs.region }}" \
-          -var="droplet_name=${{ github.event.inputs.droplet_name }}" \
-          -input=false
+        run: |
+          terraform apply -auto-approve \
+            -var="do_token=${{ secrets.DIGITALOCEAN_TOKEN }}" \
+            -var="ssh_fingerprint=b2:5f:b6:f8:09:e2:91:fd:39:2c:9e:e2:c8:65:a6:9d" \
+            -var="region=${{ github.event.inputs.region }}" \
+            -var="droplet_name=${{ github.event.inputs.droplet_name }}" \
+            -input=false
