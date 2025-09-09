@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "digitalocean" {
-  token = DIGITALOCEAN_TOKEN
+  token = var.do_token
 }
 
 resource "digitalocean_droplet" "vpn" {

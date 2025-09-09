@@ -7,3 +7,8 @@ variable "region" {
 variable "droplet_name" {
   default = "wireguard-vpn"
 }
+variable "do_token" {
+  description = "DigitalOcean API token"
+  type        = string
+  sensitive   = true
+}
