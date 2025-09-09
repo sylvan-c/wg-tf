@@ -31,9 +31,8 @@ jobs:
             -var="region=${{ github.event.inputs.region }}" \
             -var="droplet_name=wg-vpn" \
             -input=false
-      
-      - name: Get VPN droplet IP
-        run: |
-          VPN_IP=$(terraform output -raw vpn_ip)
-          echo "vpn_ip=$VPN_IP" >> $GITHUB_OUTPUT
 
+      - name: VPN IP
+        run: |
+          IP=$(terraform output -raw vpn_ip)
+          echo "${IP%%:*}"
