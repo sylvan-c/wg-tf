@@ -1,3 +1,5 @@
+name: Destroy VPN
+
 jobs:
   destroy:
     runs-on: ubuntu-latest
