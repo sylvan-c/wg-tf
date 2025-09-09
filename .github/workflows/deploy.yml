@@ -37,5 +37,7 @@ jobs:
             -input=false
       
       - name: Get VPN droplet IP
-        run: terraform output -raw vpn_ip
+        run: |
+          VPN_IP=$(terraform output -raw vpn_ip)
+          echo "vpn_ip=$VPN_IP" >> $GITHUB_OUTPUT
 
