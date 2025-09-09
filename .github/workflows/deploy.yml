@@ -7,10 +7,6 @@ on:
         description: 'Region to deploy VPN'
         required: true
         default: nyc3
-      droplet_name:
-        description: 'Name for the VPN droplet'
-        required: true
-        default: wg-vpn
 
 jobs:
   deploy:
@@ -33,7 +29,7 @@ jobs:
             -var="do_token=${{ secrets.DIGITALOCEAN_TOKEN }}" \
             -var="ssh_fingerprint=b2:5f:b6:f8:09:e2:91:fd:39:2c:9e:e2:c8:65:a6:9d" \
             -var="region=${{ github.event.inputs.region }}" \
-            -var="droplet_name=${{ github.event.inputs.droplet_name }}" \
+            -var="droplet_name=wg-vpn" \
             -input=false
       
       - name: Get VPN droplet IP

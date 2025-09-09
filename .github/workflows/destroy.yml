@@ -1,19 +1,11 @@
 name: Destroy VPN
 
-on:
-  workflow_dispatch:
-    inputs:
-      droplet_name:
-        description: 'Name of VPN droplet'
-        required: true
-        default: wg-vpn
-
 jobs:
   destroy:
     runs-on: ubuntu-latest
     env:
       DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
-      DROPLET_NAME: ${{ github.event.inputs.droplet_name }}
+      DROPLET_NAME: wg-vpn
     steps:
       - name: Destroy active VPN droplet
         run: |
